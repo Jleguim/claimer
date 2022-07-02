@@ -63,6 +63,7 @@ function authed(req, res, next) {
 
     verify(token)
         .then((data) => {
+            res.cookie('jwt', token)
             req.jwtData = data
             next()
         })
