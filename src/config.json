@@ -4,14 +4,17 @@
         "default": {
             "width": 800,
             "height": 600,
-            "title": "Claimer",
-            "icon": "./public/icon.ico"
+            "title": "Claimer"
         },
         "small": {
             "width": 250,
             "height": 188,
-            "title": "Claimer",
-            "icon": "./public/icon.ico"
+            "title": "Claimer"
+        },
+        "dev": {
+            "width": 1080,
+            "height": 810,
+            "title": "Claimer"
         }
     }
 }
