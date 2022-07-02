@@ -1,0 +1,17 @@
+{
+    "API": "localhost:1337",
+    "windowOptions": {
+        "default": {
+            "width": 800,
+            "height": 600,
+            "title": "Claimer",
+            "icon": "./public/icon.ico"
+        },
+        "small": {
+            "width": 250,
+            "height": 188,
+            "title": "Claimer",
+            "icon": "./public/icon.ico"
+        }
+    }
+}
