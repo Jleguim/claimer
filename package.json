@@ -5,8 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "concurrently npm:dev:*",
-    "dev:serve": "nodemon ./backend/index.js",
-    "dev:run": "electron ./src/main.js",
+    "dev:serve": "nodemon --watch ./backend/ --exec \"clear && node ./backend/index.js\"",
+    "dev:run": "nodemon --watch ./src/ --exec \"clear && electron ./src/main.js\"",
     "test": "node test.js",
     "build": "electron-packager ./src/main.js --overwrite --asar --icon ./src/public/icon.ico --out ./bin"
   },
