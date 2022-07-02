@@ -1,0 +1,24 @@
+{
+  "name": "claimer",
+  "version": "1.0.0",
+  "description": "Claimer",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "concurrently npm:dev:*",
+    "dev:serve": "node ./backend/index.js",
+    "dev:run": "electron ./src/main.js",
+    "test": "node test.js",
+    "build": "electron-packager ./src/main.js --overwrite --asar --icon ./src/public/icon.ico --out ./bin"
+  },
+  "keywords": [],
+  "author": "Jleguim",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.2.2",
+    "electron": "^19.0.7",
+    "electron-packager": "^15.5.1"
+  },
+  "dependencies": {
+    "superagent": "^8.0.0"
+  }
+}
