@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron')
 
 const config = require('./config.json')
-const jwt = undefined
+var jwt = undefined
 
 ipcMain.handle('jwt', (event, token) => {
     if (token) return jwt = token
