@@ -11,7 +11,8 @@ app.whenReady().then(() => {
         }
     })
     // win.removeMenu()
-    win.loadFile(__dirname + '/public/views/main.html')
+    win.loadFile(__dirname + '/public/views/login.html')
     
-    require('./handles')
+    require('./APICalls.js')
+    require('./IPC.js')
 })
