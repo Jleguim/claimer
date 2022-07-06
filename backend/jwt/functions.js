@@ -17,7 +17,7 @@ module.exports.sign = (data) => {
     return new Promise((resolve, reject) => {
         if (data == undefined) reject('Argument data not defined')
 
-        jwt.sign(data, 'secret', { expiresIn: '30s' }, (err, token) => {
+        jwt.sign(data, 'secret', { expiresIn: '1d' }, (err, token) => {
             if (err) return reject(err)
             if (token == undefined) return reject('Unkown error')
 
