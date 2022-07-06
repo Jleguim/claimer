@@ -11,6 +11,7 @@ ipcMain.handle('resumeSession', (event) => {
 
         requests.get(endpoint)
             .set('Cookie', `jwt=${jwt}`)
+            .ok(res => res.status < 500)
             .then((res) => {
                 if (res.body.message != 'Authed!') return reject()
                 resolve()
@@ -26,6 +27,7 @@ ipcMain.handle('getProducts', (event) => {
 
         requests.get(endpoint)
             .set('Cookie', `jwt=${jwt}`)
+            .ok(res => res.status < 500)
             .then((res) => resolve({ text: res.text, body: res.body }))
             .catch(reject)
     })
@@ -39,14 +41,19 @@ ipcMain.handle('login', (event, username, password) => {
         requests.get(endpoint)
             .set('Content-Type', 'application/json')
             .send(body)
+            .ok(res => res.status < 500)
             .then((res) => {
-                var set_cookie = res.header['set-cookie']
-                var jwt_cookie = set_cookie[0]
+                var data = { text: res.text, body: res.body, status: res.status }
 
-                var newJwt = jwt_cookie.split('; ')[0].split('=')[1]
-                updateToken(newJwt)
+                if (res.status == 200) {
+                    var set_cookie = res.header['set-cookie']
+                    var jwt_cookie = set_cookie[0]
 
-                resolve({ text: res.text, body: res.body })
+                    var newJwt = jwt_cookie.split('; ')[0].split('=')[1]
+                    updateToken(newJwt)
+                }
+
+                resolve(data)
             })
             .catch(reject)
     })
