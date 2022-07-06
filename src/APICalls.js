@@ -2,7 +2,22 @@ const { ipcMain } = require('electron')
 const requests = require('superagent')
 
 const config = require('./config.json')
-const { getToken, updateToken } = require('./jwt.js')
+const { getToken, updateToken } = require('./configData.js')
+
+ipcMain.handle('resumeSession', (event) => {
+    return new Promise((resolve, reject) => {
+        var endpoint = config.API + '/auth/check'
+        var jwt = getToken()
+
+        requests.get(endpoint)
+            .set('Cookie', `jwt=${jwt}`)
+            .then((res) => {
+                if (res.body.message != 'Authed!') return reject()
+                resolve()
+            })
+            .catch(reject)
+    })
+})
 
 ipcMain.handle('getProducts', (event) => {
     return new Promise((resolve, reject) => {
