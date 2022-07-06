@@ -88,7 +88,5 @@ function createElement(elementTag, parameters, classes, styles) {
 }
 
 window.requests.resumeSession()
-.then(() => {
-    window.location.replace('main.html')
-})
-.catch(() => console.log('No session found'))
+    .then(() => window.location.replace('main.html'))
+    .catch(() => console.log('No session found'))
