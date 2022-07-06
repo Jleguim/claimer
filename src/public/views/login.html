@@ -2,44 +2,51 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
 
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="../styles/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="flex h-screen" id="content">
-        <div class="m-auto" id="loginForm">
-            <form class="bg-white shadow rounded px-8 pt-6 pb-8 mb-4">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-                        Username
-                    </label>
-                    <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="username" type="text" placeholder="Username">
-                </div>
-                <div class="mb-6" id="forError">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                        Password
-                    </label>
-                    <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password" type="password" placeholder="Password">
-                </div>
-                <div class="flex items-center justify-between">
-                    <button
-                        class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="button" id="submit">
-                        Sign In
-                    </button>
-                </div>
-            </form>
+<body class="bg-zinc-800">
+
+    <div class="relative flex min-h-screen flex-col justify-center overflow-hidden py-6 sm:py-12">
+        <div
+            class="relative px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-300/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
+            <img class="mx-auto h-12 w-auto"
+                src="https://cdn.discordapp.com/attachments/451359497546498051/993374995638140958/logo.png"
+                alt="Logo" />
+
+            <div class="grid text-white">
+                <label for="username" class="bloc text-sm font-bold mt-4 mb-2">Name</label>
+                <input type="text" name="username" id="username" placeholder="Username"
+                    class="w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+
+                <label for="password" class="block text-sm font-bold mt-4 mb-2">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password"
+                    class="w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+
+                <button
+                    class="bg-violet-500 hover:bg-opacity-40 text-white font-bold py-2 px-4 rounded mt-6 focus:outline-none focus:shadow-outline"
+                    id="loginBtn">Login</button>
+            </div>
         </div>
     </div>
 
+    <div id="forLog" class="absolute top-0"></div>
+
+    <template id="login-log">
+        <div class="w-72 m-2 rounded border px-4 py-3">
+            <span class="block" id="log"></span>
+        </div>
+    </template>
+
+    <script src="../js/loginLogTemplate.js"></script>
     <script src="../js/login.js"></script>
 </body>
 
