@@ -6,19 +6,15 @@ submit.onclick = async function () {
     var input_username = document.getElementById('username')
     var input_password = document.getElementById('password')
 
-    var credentials = {
-        username: input_username.value,
-        password: input_password.value
-    }
+    var username = input_username.value, password = input_password.value
 
-    if (!credentials.username && !credentials.password) return errorHandler(0)
-    if (!credentials.username) return errorHandler(1)
-    if (!credentials.password) return errorHandler(2)
+    if (!username && !password) return errorHandler(0)
+    if (!username) return errorHandler(1)
+    if (!password) return errorHandler(2)
 
     try {
-        var loginResponse = await window.requests.login('test', '1234')
+        var loginResponse = await window.requests.login(username, password)
         document.body.innerHTML += loginResponse.text
-        window.keys.jwt(loginResponse.jwt)
 
         window.location.replace('main.html')
     } catch (error) {
