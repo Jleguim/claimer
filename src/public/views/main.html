@@ -1,14 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <link rel="stylesheet" href="../styles/style.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <h4>Hello world!</h4>
-    <script src="../js/main.js"></script>
+<!-- 
+  Light mode:
+  bg-white
+  text-gray-700
+ -->
+
+<body class="bg-zinc-800">
+  <nav class="relative shadow">
+    <div class="px-8">
+      <div class="flex h-16 items-center">
+
+        <div class="flex flex-shrink-0 items-center cursor-pointer" id="logo">
+          <img class="block h-12 w-auto"
+            src="https://cdn.discordapp.com/attachments/451359497546498051/993374995638140958/logo.png" alt="Logo" />
+        </div>
+
+        <div class="absolute right-0 mr-6">
+          <div class="flex space-x-4" id="nav-buttons">
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 bg-opacity-40 text-white cursor-pointer">Home</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">Announcements</a>
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">About</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="text-white" id="content">
+
+  </div>
+
+  <template id="product">
+    <div class="shadow">
+      <div class="justify-center flex my-3">
+        <img class="block h-48 w-auto" id="productimg" />
+      </div>
+      <div class="text-center my-3">
+        <p id="productname"></p>
+        <p id="productprice"></p>
+      </div>
+      <div class="justify-center flex my-3">
+        <button class="rounded-xl bg-violet-500 py-1 px-4" id="buybtn">Buy</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="../js/productTemplate.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 
 </html>
