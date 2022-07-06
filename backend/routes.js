@@ -7,5 +7,7 @@ module.exports = (app) => {
     app.use('/auth/', json())
 
     app.get('/auth/login', controllers.login)
+    app.get('/auth/extend', controllers.extendToken)
+
     app.get('/api/products', jwt.isAuthorized, controllers.getProducts)
 }
