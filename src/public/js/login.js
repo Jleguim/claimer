@@ -20,7 +20,7 @@ submit.onclick = async function () {
         document.body.innerHTML += loginResponse.text
         window.keys.jwt(loginResponse.jwt)
 
-        console.log(loginResponse)
+        window.location.replace('main.html')
     } catch (error) {
         console.log(error)
     }
