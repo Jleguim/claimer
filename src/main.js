@@ -1,6 +1,9 @@
 const { app, BrowserWindow } = require('electron')
 
 const config = require('./config.json')
+const configData = require('./configData')
+
+console.log(app.getPath('userData'))
 
 app.whenReady().then(() => {
     let win = new BrowserWindow({
@@ -14,5 +17,6 @@ app.whenReady().then(() => {
     win.loadFile(__dirname + '/public/views/login.html')
     
     require('./APICalls.js')
-    require('./IPC.js')
 })
+
+app.addListener('before-quit', (event) => configData.saveConfigData())
