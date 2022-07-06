@@ -5,10 +5,10 @@ var jwt = undefined
 
 var usrDataPath = app.getPath('userData')
 var configPath = usrDataPath + '\\config.json'
+var configData = {}
 
-if (!fs.existsSync(configPath)) fs.writeFileSync(configPath, JSON.stringify({}, 0, 3))
-
-var configData = JSON.parse(fs.readFileSync(configPath))
+if (!fs.existsSync(configPath)) saveConfigData()
+else configData = JSON.parse(fs.readFileSync(configPath))
 
 function saveConfigData() {
     fs.writeFileSync(configPath, JSON.stringify(configData, 0, 3))
