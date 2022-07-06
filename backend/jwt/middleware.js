@@ -15,7 +15,7 @@ module.exports.isAuthorized = (req, res, next) => {
             if (err.message == 'jwt expired') {
                 return res.status(403).send({ message: 'Forbidden' })
             }
-            
+
             res.status(500).send({ message: 'Internal server error' })
         })
 }
