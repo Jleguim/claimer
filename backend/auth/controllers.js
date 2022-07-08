@@ -25,7 +25,7 @@ module.exports.login = async (req, res) => {
             return
         }
 
-        var token = await jwt.sign({ username: req.body.username })
+        var token = await jwt.sign({ username: queriedUser.username, discordId: queriedUser.discordId })
 
         if (req.fromDiscord == true) {
             var body = { jwt: token }
@@ -49,7 +49,7 @@ module.exports.extendJWT = async (req, res) => {
 
     try {
         var data = await jwt.verify(req.cookies.jwt)
-        var newToken = await jwt.sign({ username: data.username })
+        var newToken = await jwt.sign({ username: data.username, discordId: data.discordId })
 
         res.cookie('jwt', newToken)
         res.status(200).send({ message: 'Extended!' })
@@ -79,13 +79,17 @@ module.exports.discordAuthCallback = async (req, res, next) => {
         var userData = await discord.getUser(body.access_token)
 
         var User = mongoose.models.User
-        var user = new User({ username: userData.username })
+        var user = await User.findOne({ discordId: userData.id })
+        
+        if (!user) {
+            user = new User({ username: userData.username, discordId: userData.id })
 
-        user.hashPassword(DEFAULT_USER_PASSWORD)
-        await user.save()
+            user.hashPassword(DEFAULT_USER_PASSWORD)
+            await user.save()
+        }
 
         req.fromDiscord = true
-        req.body = { username: userData.username, password: DEFAULT_USER_PASSWORD }
+        req.body = { username: user.username, password: DEFAULT_USER_PASSWORD }
 
         next()
     } catch (error) {
