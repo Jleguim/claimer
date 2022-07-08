@@ -1,7 +1,7 @@
 const functions = require('./functions.js')
+const middleware = require('./middleware.js')
 
 module.exports = {
-    authUrl: functions.authUrl,
-    requestToken: functions.requestToken,
-    getUser: functions.getUser
+    functions,
+    middleware
 }

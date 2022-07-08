@@ -1,9 +1,9 @@
 const { json } = require('body-parser')
 
-const jwt = require('./auth/').jwt
+const { jwt, discord } = require('./auth/')
 
-const controllers = require('./controllers.js')
-const auth = require('./auth/controllers')
+const apiControllers = require('./controllers.js')
+const authControllers = require('./auth/controllers')
 
 const DISCORD_CALLBACK_ROUTE = process.env.DISCORD_CALLBACK_ROUTE
 
@@ -11,15 +11,15 @@ module.exports = (app) => {
     app.use('/auth/', json())
 
     // jwt
-    app.get('/auth/login', auth.login)
-    app.get('/auth/extend', auth.extendJWT)
-    app.get('/auth/check', jwt.isAuthorized, auth.checkJWT)
+    app.get('/auth/login', authControllers.login)
+    app.get('/auth/extend', jwt.middleware.extendJWT, authControllers.extendJWT)
+    app.get('/auth/check', jwt.middleware.isAuthorized, authControllers.checkJWT)
 
     // discord
-    app.get('/auth/discord', auth.redirectDiscordAuthUrl)
-    app.get(DISCORD_CALLBACK_ROUTE, auth.discordAuthCallback, auth.login)
+    app.get('/auth/discord', authControllers.redirectDiscordAuthUrl)
+    app.get(DISCORD_CALLBACK_ROUTE, discord.middleware.discordAuthCallback, authControllers.login)
 
     // secured routes
-    app.get('/api/products', jwt.isAuthorized, controllers.getProducts)
-    app.get('/api/@me', jwt.isAuthorized, controllers.me)
+    app.get('/api/products', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.getProducts)
+    app.get('/api/@me', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.me)
 }

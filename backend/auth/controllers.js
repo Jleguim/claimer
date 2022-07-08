@@ -3,8 +3,6 @@ const mongoose = require('mongoose')
 const jwt = require('./jwt/')
 const discord = require('./discord')
 
-const DEFAULT_USER_PASSWORD = process.env.DEFAULT_USER_PASSWORD
-
 // JWT stuff
 module.exports.login = async (req, res) => {
     if (req.body.username == undefined || req.body.password == undefined) {
@@ -25,7 +23,7 @@ module.exports.login = async (req, res) => {
             return
         }
 
-        var token = await jwt.sign({ username: queriedUser.username, discordId: queriedUser.discordId })
+        var token = await jwt.functions.sign({ username: queriedUser.username, discordId: queriedUser.discordId })
 
         if (req.fromDiscord == true) {
             var body = { jwt: token }
@@ -41,62 +39,10 @@ module.exports.login = async (req, res) => {
     }
 }
 
-module.exports.extendJWT = async (req, res) => {
-    if (!req.cookies.jwt) {
-        res.status(403).send({ message: 'Forbidden' })
-        return
-    }
-
-    try {
-        var data = await jwt.verify(req.cookies.jwt)
-        var newToken = await jwt.sign({ username: data.username, discordId: data.discordId })
-
-        res.cookie('jwt', newToken)
-        res.status(200).send({ message: 'Extended!' })
-    } catch (error) {
-        console.log(error.message)
-
-        if (error.message != 'jwt expired') {
-            return res.status(500).send({ message: 'Internal server error' })
-        }
-
-        res.status(403).send({ message: 'Forbidden' })
-    }
-}
-
+module.exports.extendJWT = async (req, res) => res.status(200).send({ message: 'Extended!' })
 module.exports.checkJWT = (req, res) => res.status(200).send({ message: 'Authed!' })
 // --------
 
 // Discord stuff
-module.exports.discordAuthCallback = async (req, res, next) => {
-    if (!req.query.code) {
-        res.status(400).send({ message: 'Bad Request' })
-        return
-    }
-
-    try {
-        var body = await discord.requestToken(req.query.code)
-        var userData = await discord.getUser(body.access_token)
-
-        var User = mongoose.models.User
-        var user = await User.findOne({ discordId: userData.id })
-
-        if (!user) {
-            user = new User({ username: userData.username, discordId: userData.id })
-
-            user.hashPassword(DEFAULT_USER_PASSWORD)
-            await user.save()
-        }
-
-        req.fromDiscord = true
-        req.body = { username: user.username, password: DEFAULT_USER_PASSWORD }
-
-        next()
-    } catch (error) {
-        if (!error.response) return console.log(error.message)
-        console.log(error.response.body)
-    }
-}
-
-module.exports.redirectDiscordAuthUrl = (req, res) => res.redirect(discord.authUrl)
+module.exports.redirectDiscordAuthUrl = (req, res) => res.redirect(discord.functions.authUrl)
 // -------------

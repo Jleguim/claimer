@@ -28,7 +28,15 @@ ipcMain.handle('@me', (event) => {
         requests.get(endpoint)
             .set('Cookie', `jwt=${jwt}`)
             .ok(res => res.status < 500)
-            .then((res) => resolve({ text: res.text, body: res.body }))
+            .then((res) => {
+                var set_cookie = res.header['set-cookie']
+                var jwt_cookie = set_cookie[0]
+
+                var newJwt = jwt_cookie.split('; ')[0].split('=')[1]
+                updateToken(newJwt)
+
+                resolve({ text: res.text, body: res.body })
+            })
             .catch(reject)
     })
 })
@@ -41,7 +49,15 @@ ipcMain.handle('getProducts', (event) => {
         requests.get(endpoint)
             .set('Cookie', `jwt=${jwt}`)
             .ok(res => res.status < 500)
-            .then((res) => resolve({ text: res.text, body: res.body }))
+            .then((res) => {
+                var set_cookie = res.header['set-cookie']
+                var jwt_cookie = set_cookie[0]
+
+                var newJwt = jwt_cookie.split('; ')[0].split('=')[1]
+                updateToken(newJwt)
+
+                resolve({ text: res.text, body: res.body })
+            })
             .catch(reject)
     })
 })
