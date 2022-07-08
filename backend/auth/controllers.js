@@ -7,13 +7,13 @@ const DEFAULT_USER_PASSWORD = process.env.DEFAULT_USER_PASSWORD
 
 // JWT stuff
 module.exports.login = async (req, res) => {
-    if (req.body.username | req.body.password == undefined) {
+    if (req.body.username == undefined || req.body.password == undefined) {
         return res.status(400).send({ message: 'Bad Request' })
     }
 
     try {
         var User = mongoose.models.User
-        var queriedUser = await User.findOne({ username: req.body.username })
+        var queriedUser = await User.findOne({ $or: [{ username: req.body.username }, { discordId: req.body.username }] })
 
         if (!queriedUser) {
             res.status(403).send({ message: 'Forbidden', code: 1 })
@@ -80,7 +80,7 @@ module.exports.discordAuthCallback = async (req, res, next) => {
 
         var User = mongoose.models.User
         var user = await User.findOne({ discordId: userData.id })
-        
+
         if (!user) {
             user = new User({ username: userData.username, discordId: userData.id })
 
