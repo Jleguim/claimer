@@ -1,14 +1,18 @@
 {
   "name": "claimer",
+  "productName": "Claimer",
   "version": "1.0.0",
   "description": "Claimer",
-  "main": "src/main.js",
+  "main": "./",
   "scripts": {
     "start": "concurrently npm:dev:*",
     "dev:serve": "nodemon --watch ./backend/ --exec \"clear && node ./backend/index.js\"",
     "dev:run": "nodemon --watch ./src/ --exec \"clear && electron ./src/main.js\"",
-    "test": "node test.js",
-    "build": "electron-packager ./src/main.js --overwrite --asar --icon ./src/public/img/icon.ico --out ./bin"
+
+    "build": "npm run build:cp && npm run build:build && npm run build:rm",
+    "build:build": "electron-packager ./src/ --overwrite --asar --icon ./src/public/img/icon.ico --out ./bin",
+    "build:cp": "cp package.json src/package.json",
+    "build:rm": "rm src/package.json"
   },
   "keywords": [],
   "author": "Jleguim",
