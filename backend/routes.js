@@ -17,7 +17,7 @@ module.exports = (app) => {
 
     // discord
     app.get('/auth/discord', auth.redirectDiscordAuthUrl)
-    app.get(DISCORD_CALLBACK_ROUTE, auth.discordAuthCallback)
+    app.get(DISCORD_CALLBACK_ROUTE, auth.discordAuthCallback, auth.login)
 
     // secured routes
     app.get('/api/products', jwt.isAuthorized, controllers.getProducts)
