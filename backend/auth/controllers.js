@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const jwt = require('./jwt/')
 const discord = require('./discord')
 
