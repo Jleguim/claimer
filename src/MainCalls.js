@@ -18,12 +18,15 @@ ipcMain.handle('createDiscordAuthWindow', (event) => {
     var discordWindow = winManager.createChildWindow(winConfig, url, true)
     discordWindow.removeMenu()
 
-    ipcMain.handleOnce('closeDiscordAuthWindow', (event, body) => {
+    discordWindow.on('close', () => ipcMain.removeHandler('closeDiscordAuthWindow'))
+
+    ipcMain.handle('closeDiscordAuthWindow', (event, body) => {
         var data = JSON.parse(body)
         var mainWindow = discordWindow.getParentWindow()
 
-        mainWindow.webContents.send('discordAuthFinished')
         configData.updateToken(data.jwt)
         discordWindow.close()
+
+        mainWindow.webContents.send('discordAuthFinished')
     })
 })
