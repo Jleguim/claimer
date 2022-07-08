@@ -1,5 +1,5 @@
 {
-    "API": "localhost:1337",
+    "API": "http://localhost:1337",
     "windowOptions": {
         "default": {
             "width": 800,
