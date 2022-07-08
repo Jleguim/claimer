@@ -21,4 +21,5 @@ module.exports = (app) => {
 
     // secured routes
     app.get('/api/products', jwt.isAuthorized, controllers.getProducts)
+    app.get('/api/@me', jwt.isAuthorized, controllers.me)
 }
