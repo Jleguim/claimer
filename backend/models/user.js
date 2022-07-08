@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 var userSchema = new mongoose.Schema({
+    discordId: { type: String, required: true, unique: true },
     username: { type: String, required: true },
     password: { type: String, required: true }
 })
