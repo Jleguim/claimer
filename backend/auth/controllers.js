@@ -26,6 +26,13 @@ module.exports.login = async (req, res) => {
         }
 
         var token = await jwt.sign({ username: req.body.username })
+
+        if (req.fromDiscord == true) {
+            var body = { jwt: token }
+            res.send(`<body>${JSON.stringify(body, 0, 0)}</body><script>window.discord.closeDiscordAuthWindow(document.body.innerText)</script>`)
+            return
+        }
+
         res.cookie('jwt', token)
         res.status(200).send({ message: 'Authenticated!' })
     } catch (error) {
@@ -77,6 +84,7 @@ module.exports.discordAuthCallback = async (req, res, next) => {
         user.hashPassword(DEFAULT_USER_PASSWORD)
         await user.save()
 
+        req.fromDiscord = true
         req.body = { username: userData.username, password: DEFAULT_USER_PASSWORD }
 
         next()

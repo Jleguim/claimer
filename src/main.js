@@ -19,6 +19,7 @@ app.whenReady().then(() => {
     win.loadURL(__dirname + '/public/views/login.html')
 
     require('./APICalls.js')
+    require('./MainCalls.js')
 })
 
 app.addListener('before-quit', (event) => configData.saveConfigData())
