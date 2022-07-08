@@ -20,6 +20,19 @@ ipcMain.handle('resumeSession', (event) => {
     })
 })
 
+ipcMain.handle('@me', (event) => {
+    return new Promise((resolve, reject) => {
+        var endpoint = config.API + '/api/@me'
+        var jwt = getToken()
+
+        requests.get(endpoint)
+            .set('Cookie', `jwt=${jwt}`)
+            .ok(res => res.status < 500)
+            .then((res) => resolve({ text: res.text, body: res.body }))
+            .catch(reject)
+    })
+})
+
 ipcMain.handle('getProducts', (event) => {
     return new Promise((resolve, reject) => {
         var endpoint = config.API + '/api/products'
