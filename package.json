@@ -8,7 +8,7 @@
     "dev:serve": "nodemon --watch ./backend/ --exec \"clear && node ./backend/index.js\"",
     "dev:run": "nodemon --watch ./src/ --exec \"clear && electron ./src/main.js\"",
     "test": "node test.js",
-    "build": "electron-packager ./src/main.js --overwrite --asar --icon ./src/public/icon.ico --out ./bin"
+    "build": "electron-packager ./src/main.js --overwrite --asar --icon ./src/public/img/icon.ico --out ./bin"
   },
   "keywords": [],
   "author": "Jleguim",

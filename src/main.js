@@ -9,7 +9,7 @@ console.log(app.getPath('userData'))
 app.whenReady().then(() => {
     var win = winManager.createMainWindow({
         ...config.windowOptions.dev,
-        icon: __dirname + '/public/icon.ico',
+        icon: __dirname + '/public/img/icon.ico',
         webPreferences: {
             preload: __dirname + '/public/js/preload.js'
         } 
