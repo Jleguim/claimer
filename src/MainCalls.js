@@ -4,6 +4,11 @@ const winManager = require('./winManager')
 const configData = require('./configData')
 const config = require('./config.json')
 
+ipcMain.handle('logout', (event) => {
+    configData.updateToken('')
+    configData.saveConfigData()
+})
+
 ipcMain.handle('createDiscordAuthWindow', (event) => {
     var url = `${config.API}/auth/discord`
     var winConfig = {

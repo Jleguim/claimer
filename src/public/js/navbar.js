@@ -1,18 +1,20 @@
 var currentPage = 0;
+var changedPageEvent = new Event('changedPage');
 
 (function () {
     var navButtons = document.getElementById('nav-buttons')
-    var changedPageEvent = new Event('changedPage')
-
-    // document.dispatchEvent(changedPageEvent)
-
-    var children = Array.from(navButtons.children)
-    children.forEach((child, index) => {
-        child.onclick = changeCurrentAndUpdate(index)
-    })
 
     var logo = document.getElementById('logo')
     logo.onclick = changeCurrentAndUpdate(0)
+
+    var children = Array.from(navButtons.children)
+    children.forEach((child, index) => child.onclick = changeCurrentAndUpdate(index))
+
+    var logoutBtn = document.getElementById('logoutBtn')
+    logoutBtn.onclick = async () => {
+        await window.other.logout()
+        window.location.replace('login.html')
+    }
 
     function changeCurrentAndUpdate(newCurrent) {
         return () => {

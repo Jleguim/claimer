@@ -7,6 +7,10 @@ contextBridge.exposeInMainWorld('requests', {
     me: () => ipcRenderer.invoke('@me')
 })
 
+contextBridge.exposeInMainWorld('other', {
+    logout: () => ipcRenderer.invoke('logout')
+})
+
 contextBridge.exposeInMainWorld('discord', {
     createDiscordAuthWindow: () => ipcRenderer.invoke('createDiscordAuthWindow'),
     closeDiscordAuthWindow: (body) => ipcRenderer.invoke('closeDiscordAuthWindow', body),
