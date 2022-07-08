@@ -1,24 +1,26 @@
+require('dotenv').config()
+
 const express = require('express')
 const mongoose = require('mongoose')
 const cookie = require('cookie-parser')
 
 var app = express()
 
-mongoose.connection.on('connected', () => {
-    app.use(cookie())
-    
-    require('./routes.js')(app)
+var PORT = process.env.PORT
+var MONGO_URL = process.env.MONGO_URL
+
+mongoose.connect(MONGO_URL, error => {
+    if (error) throw error
+
+    console.log(`Mongoose connected to ${MONGO_URL}`)
 
     require('./models/user.js')
     require('./models/product.js')
 
-    app.listen(1337, () => {
-        console.log('Listening on port 1337')
+    app.listen(PORT, () => {
+        console.log(`Listening on port ${PORT}`)
+
+        app.use(cookie())
+        require('./routes.js')(app)
     })
 })
-
-mongoose.connection.on('connected', () => {
-    console.log('Mongoose connected to ' + 'mongodb://localhost/test')
-})
-
-mongoose.connect('mongodb://localhost/test')
