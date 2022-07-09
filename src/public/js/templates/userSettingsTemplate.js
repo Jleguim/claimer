@@ -19,19 +19,14 @@ class UserSettingsElement extends HTMLElement {
             if (usernameInpt.value == ' ') return alert('Invalid username')
             if (newPassInpt.value == ' ') return alert('Invalid password')
 
-            if (usernameInpt.value != currentUsername) {
-                if (usernameInpt.value != '') {
-                    toUpdate.username = usernameInpt.value
-                }
+            if (usernameInpt.value != currentUsername & usernameInpt.value != '') {
+                toUpdate.username = usernameInpt.value
             }
 
-            if (newPassInpt.value == confirmPassInpt.value) {
-                if (newPassInpt.value != '') {
-                    toUpdate.password = newPassInpt.value
-                }
+            if (newPassInpt.value == confirmPassInpt.value && newPassInpt - value != '') {
+                toUpdate.password = newPassInpt.value
             } else return alert('Passwords do not match.')
 
-            console.log(toUpdate)
             await window.requests.updateUser(toUpdate)
             window.location.reload()
         }
