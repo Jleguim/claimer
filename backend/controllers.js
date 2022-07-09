@@ -11,6 +11,26 @@ module.exports.getProducts = async (req, res) => {
     }
 }
 
+module.exports.meUpdate = async (req, res, next) => {
+    try {
+        var User = mongoose.models.User
+        var user = await User.findOne({ discordId: req.jwtData.discordId })
+
+        var keysToUpdate = Object.keys(req.body)
+        keysToUpdate.forEach(key => {
+            user[key] = req.body[key]
+            if (key == 'password') user.hashPassword(user[key])
+        })
+
+        await user.save()
+
+        next()
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send({ message: 'Internal Server Error' })
+    }
+}
+
 module.exports.me = async (req, res) => {
     try {
         var User = mongoose.models.User

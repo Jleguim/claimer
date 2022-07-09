@@ -20,6 +20,30 @@ ipcMain.handle('resumeSession', (event) => {
     })
 })
 
+ipcMain.handle('updateUser', (event, toUpdate) => {
+    return new Promise((resolve, reject) => {
+        var endpoint = config.API + '/api/updateMe'
+        var body = JSON.stringify(toUpdate)
+        var jwt = getToken()
+
+        requests.get(endpoint)
+            .set('Content-Type', 'application/json')
+            .set('Cookie', `jwt=${jwt}`)
+            .send(body)
+            .ok(res => res.status < 500)
+            .then((res) => {
+                var set_cookie = res.header['set-cookie']
+                var jwt_cookie = set_cookie[0]
+
+                var newJwt = jwt_cookie.split('; ')[0].split('=')[1]
+                updateToken(newJwt)
+
+                resolve({ text: res.text, body: res.body })
+            })
+            .catch(reject)
+    })
+})
+
 ipcMain.handle('@me', (event) => {
     return new Promise((resolve, reject) => {
         var endpoint = config.API + '/api/@me'

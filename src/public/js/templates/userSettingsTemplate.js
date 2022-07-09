@@ -8,9 +8,32 @@ class UserSettingsElement extends HTMLElement {
 
     connectedCallback() {
         const saveBtn = this.userSettings.getElementById('saveBtn')
+        const usernameInpt = this.userSettings.getElementById('username')
+        const newPassInpt = this.userSettings.getElementById('newPass')
+        const confirmPassInpt = this.userSettings.getElementById('confirmPass')
 
-        saveBtn.onclick = () => {
-            console.log('saved shit')
+        saveBtn.onclick = async () => {
+            var toUpdate = {}
+            var currentUsername = this.getAttribute('username')
+
+            if (usernameInpt.value == ' ') return alert('Invalid username')
+            if (newPassInpt.value == ' ') return alert('Invalid password')
+
+            if (usernameInpt.value != currentUsername) {
+                if (usernameInpt.value != '') {
+                    toUpdate.username = usernameInpt.value
+                }
+            }
+
+            if (newPassInpt.value == confirmPassInpt.value) {
+                if (newPassInpt.value != '') {
+                    toUpdate.password = newPassInpt.value
+                }
+            } else return alert('Passwords do not match.')
+
+            console.log(toUpdate)
+            await window.requests.updateUser(toUpdate)
+            window.location.reload()
         }
 
         this.appendChild(this.userSettings)

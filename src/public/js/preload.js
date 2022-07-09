@@ -4,7 +4,8 @@ contextBridge.exposeInMainWorld('requests', {
     login: (username, password) => ipcRenderer.invoke('login', username, password),
     getProducts: () => ipcRenderer.invoke('getProducts'),
     resumeSession: () => ipcRenderer.invoke('resumeSession'),
-    me: () => ipcRenderer.invoke('@me')
+    me: () => ipcRenderer.invoke('@me'),
+    updateUser: (toUpdate) => ipcRenderer.invoke('updateUser', toUpdate)
 })
 
 contextBridge.exposeInMainWorld('other', {

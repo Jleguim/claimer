@@ -8,7 +8,7 @@ const authControllers = require('./auth/controllers')
 const DISCORD_CALLBACK_ROUTE = process.env.DISCORD_CALLBACK_ROUTE
 
 module.exports = (app) => {
-    app.use('/auth/', json())
+    app.use('/', json())
 
     // jwt
     app.get('/auth/login', authControllers.login)
@@ -22,4 +22,5 @@ module.exports = (app) => {
     // secured routes
     app.get('/api/products', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.getProducts)
     app.get('/api/@me', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.me)
+    app.get('/api/updateMe', jwt.middleware.isAuthorized, apiControllers.meUpdate, jwt.middleware.extendJWT, authControllers.extendJWT)
 }
