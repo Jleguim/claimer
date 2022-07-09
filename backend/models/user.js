@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt')
 var userSchema = new mongoose.Schema({
     discordId: { type: String, required: true, unique: true },
     username: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    points: { type: Number, required: true, default: 100 }
 })
 
 userSchema.method('hashPassword', function (password) {
