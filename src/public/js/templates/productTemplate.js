@@ -8,6 +8,7 @@ class ProductElement extends HTMLElement {
 
     connectedCallback() {
         var buyButton = this.product.getElementById('buybtn')
+        var productId = this.getAttribute('productId')
 
         buyButton.onclick = () => {
             console.log('Bought shit')

@@ -32,6 +32,7 @@ async function renderProductPage() {
 
     products.forEach((product, index) => {
         var productElement = document.createElement('claimer-product')
+        productElement.setAttribute('productId', product._id)
         productElement.setAttribute('name', product.name)
         productElement.setAttribute('price', product.price)
         productElement.setAttribute('img', product.pictureUrl)
