@@ -10,8 +10,8 @@ class ProductElement extends HTMLElement {
         var buyButton = this.product.getElementById('buybtn')
         var productId = this.getAttribute('productId')
 
-        buyButton.onclick = () => {
-            console.log('Bought shit')
+        buyButton.onclick = async () => {
+            await window.requests.buyProduct(productId)
         }
 
         this.appendChild(this.product)

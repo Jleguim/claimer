@@ -1,11 +1,14 @@
 const { ipcRenderer, contextBridge } = require('electron')
 
 contextBridge.exposeInMainWorld('requests', {
-    login: (username, password) => ipcRenderer.invoke('login', username, password),
-    getProducts: () => ipcRenderer.invoke('getProducts'),
     resumeSession: () => ipcRenderer.invoke('resumeSession'),
+    login: (username, password) => ipcRenderer.invoke('login', username, password),
+    
+    updateUser: (toUpdate) => ipcRenderer.invoke('updateUser', toUpdate),
     me: () => ipcRenderer.invoke('@me'),
-    updateUser: (toUpdate) => ipcRenderer.invoke('updateUser', toUpdate)
+
+    getProducts: () => ipcRenderer.invoke('getProducts'),
+    buyProduct: (productId) => ipcRenderer.invoke('buyProduct', productId)
 })
 
 contextBridge.exposeInMainWorld('other', {
