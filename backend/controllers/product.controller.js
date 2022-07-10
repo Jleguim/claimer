@@ -16,15 +16,8 @@ async function getProduct(req, res) {
 
 // * GET api/product/:productId/buy
 async function buyProduct(req, res) {
-    // TODO: I'm going to use req.body here but I might need to change this later
-    // TODO: Maybe use api/product/buy/:productId
     var productId = req.params.productId
     var product = await Product.findById(productId)
-
-    // // * I probably shouldn't trust the user/client sending the correct 'user.points' info,
-    // // * so I'm gonna use the 'req.jwtData' provided by auth.isAuthenticated to grab the user info
-    // //var discordId = req.jwtData.discordId
-    // //var user = await User.findOne({ discordId })
 
     // * Using 'req.user_doc' from the getUserData middleware
     var user = req.user_doc

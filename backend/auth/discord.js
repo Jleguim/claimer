@@ -1,11 +1,11 @@
 const requests = require('superagent')
 
-module.exports.clientId = process.env.CLIENT_ID
-module.exports.clientSecret = process.env.CLIENT_SECRET
-module.exports.scopes = ['identify']
-// should probably change this to a config file or something
-module.exports.redirectUrl = encodeURI(`http://localhost:1337/auth/callback`)
-module.exports.authUrl = `https://discord.com/oauth2/authorize?response_type=code&prompt=consent&client_id=${this.clientId}&scope=${this.scopes}&redirect_uri=${this.redirectUrl}`
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const SCOPES = ['identify']
+const REDIRECT_URL = encodeURI(`http://localhost:1337/auth/callback`)
+
+module.exports.authUrl = `https://discord.com/oauth2/authorize?response_type=code&prompt=consent&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URL}`
 
 module.exports.getUser = (access_token) => {
     return new Promise((resolve, reject) => {
@@ -21,9 +21,9 @@ module.exports.requestToken = (code) => {
         requests.post('https://discord.com/api/oauth2/token')
             .set('Content-Type', 'application/x-www-form-urlencoded')
             .send({
-                client_id: this.clientId,
-                client_secret: this.clientSecret,
-                redirect_uri: this.redirectUrl,
+                client_id: CLIENT_ID,
+                client_secret: CLIENT_SECRET,
+                redirect_uri: REDIRECT_URL,
                 grant_type: 'authorization_code',
                 code: code
             })

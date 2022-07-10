@@ -10,7 +10,6 @@ async function getData(req, res) {
 
 // * PUT api/@me
 async function updateData(req, res) {
-    // //var user = await User.findOne({ discordId: req.jwtData.discordId })
     var user = req.user_doc
 
     var keysToUpdate = Object.keys(req.body)
