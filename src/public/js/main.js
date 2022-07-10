@@ -2,9 +2,10 @@ var contentDiv = document.getElementById('content')
 
 function renderPage() {
     if (currentPage == 0) renderProductPage()
-    if (currentPage == 1) return contentDiv.innerHTML = ''
-    if (currentPage == 2) return contentDiv.innerHTML = ''
-    if (currentPage == 3) renderProfilePage()
+    if (currentPage == 1) renderProfilePage()
+    // if (currentPage == 1) return contentDiv.innerHTML = ''
+    // if (currentPage == 2) return contentDiv.innerHTML = ''
+    // if (currentPage == 3) renderProfilePage()
 }
 
 async function renderProfilePage() {
