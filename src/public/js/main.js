@@ -1,11 +1,6 @@
 var contentDiv = document.getElementById('content')
 
-// stuff that should be in a db call 
-var points = 1337
-// ------
-
 function renderPage() {
-    // contentDiv.innerHTML = ''
     if (currentPage == 0) renderProductPage()
     if (currentPage == 1) return contentDiv.innerHTML = ''
     if (currentPage == 2) return contentDiv.innerHTML = ''

@@ -7,28 +7,36 @@ class UserSettingsElement extends HTMLElement {
     }
 
     connectedCallback() {
-        const saveBtn = this.userSettings.getElementById('saveBtn')
+        const saveUsernameBtn = this.userSettings.getElementById('saveUsernameBtn')
         const usernameInpt = this.userSettings.getElementById('username')
+    
+        const savePassBtn = this.userSettings.getElementById('savePassBtn')
         const newPassInpt = this.userSettings.getElementById('newPass')
         const confirmPassInpt = this.userSettings.getElementById('confirmPass')
 
-        saveBtn.onclick = async () => {
+        saveUsernameBtn.onclick = async () => {
             var toUpdate = {}
             var currentUsername = this.getAttribute('username')
 
-            if (usernameInpt.value == ' ') return alert('Invalid username')
-            if (newPassInpt.value == ' ') return alert('Invalid password')
+            if (usernameInpt.value == ' ') return console.log('Invalid username')
+            if (usernameInpt.value == currentUsername || usernameInpt.value == '') return
 
-            if (usernameInpt.value != currentUsername & usernameInpt.value != '') {
-                toUpdate.username = usernameInpt.value
-            }
-
-            if (newPassInpt.value == confirmPassInpt.value && newPassInpt - value != '') {
-                toUpdate.password = newPassInpt.value
-            } else return alert('Passwords do not match.')
+            toUpdate.username = usernameInpt.value
 
             await window.requests.updateUser(toUpdate)
-            window.location.reload()
+            renderProfilePage()
+        }
+
+        savePassBtn.onclick = async () => {
+            var toUpdate = {}
+
+            if (newPassInpt.value == '' || confirmPassInpt.value == '') return console.log('Invalid password')
+            if (newPassInpt.value != confirmPassInpt.value) return console.log('Passwords do not match')
+            
+            toUpdate.password = newPassInpt.value
+
+            await window.requests.updateUser(toUpdate)
+            renderProfilePage()
         }
 
         this.appendChild(this.userSettings)
