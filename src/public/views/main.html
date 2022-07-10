@@ -52,21 +52,19 @@
     </div>
   </nav>
 
-  <div class="text-white" id="content">
-
-  </div>
+  <div class="text-white" id="content"></div>
 
   <template id="product">
-    <div class="shadow">
-      <div class="justify-center flex my-3">
+    <div class="shadow-xl ring-1 ring-gray-300/5 p-3">
+      <div class="justify-center flex mb-3">
         <img class="block h-48 w-auto" id="productimg" />
       </div>
-      <div class="text-center my-3">
-        <p id="productname"></p>
-        <p id="productprice"></p>
+      <div class="text-center mb-3">
+        <p id="productname" class="text-lg"></p>
+        <p id="productprice" class="text-sm"></p>
       </div>
-      <div class="justify-center flex my-3">
-        <button class="rounded-xl bg-violet-500 py-1 px-4" id="buybtn">Buy</button>
+      <div class="mb-3 flex justify-center">
+        <button class="rounded-lg bg-violet-500 py-1 px-6" id="buybtn">Buy</button>
       </div>
     </div>
   </template>

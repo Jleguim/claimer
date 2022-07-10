@@ -24,7 +24,7 @@ async function renderProductPage() {
     var products = getResponse.body
 
     var grid = document.createElement('div')
-    grid.classList.add('grid', 'grid-cols-1', 'grid-rows-1', 'gap-4', 'lg:grid-cols-5', 'sm:grid-cols-3', 'md:grid-cols-4')
+    grid.classList.add('grid', 'grid-cols-1', 'grid-rows-1', 'gap-4', 'lg:grid-cols-5', 'sm:grid-cols-3', 'md:grid-cols-4', 'm-7')
 
     products.forEach((product, index) => {
         var productElement = document.createElement('claimer-product')
