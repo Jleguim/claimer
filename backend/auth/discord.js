@@ -4,7 +4,7 @@ module.exports.clientId = process.env.CLIENT_ID
 module.exports.clientSecret = process.env.CLIENT_SECRET
 module.exports.scopes = ['identify']
 // should probably change this to a config file or something
-module.exports.redirectUrl = encodeURI(`http://localhost:1337${process.env.DISCORD_CALLBACK_ROUTE}`)
+module.exports.redirectUrl = encodeURI(`http://localhost:1337/auth/callback`)
 module.exports.authUrl = `https://discord.com/oauth2/authorize?response_type=code&prompt=consent&client_id=${this.clientId}&scope=${this.scopes}&redirect_uri=${this.redirectUrl}`
 
 module.exports.getUser = (access_token) => {

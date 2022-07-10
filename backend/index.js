@@ -3,6 +3,7 @@ require('dotenv').config({ path: __dirname + '\\.env' })
 const express = require('express')
 const mongoose = require('mongoose')
 const cookie = require('cookie-parser')
+const { json } = require('body-parser')
 
 var app = express()
 
@@ -20,7 +21,17 @@ mongoose.connect(MONGO_URL, error => {
     app.listen(PORT, () => {
         console.log(`Listening on port ${PORT}`)
 
+        const { AUTHORIZED, GET_USER, EXTEND_JWT } = require('./middleware/jwt.middleware')
+
         app.use(cookie())
-        require('./routes.js')(app)
+        app.use(json())
+        app.use('/api/', AUTHORIZED, GET_USER, EXTEND_JWT)
+
+        // * Auth routes
+        require('./routes/auth.routes')(app)
+
+        // * API routes (need jwt authorization)
+        require('./routes/me.routes')(app)
+        require('./routes/product.routes')(app)
     })
 })

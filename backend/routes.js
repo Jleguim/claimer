@@ -1,26 +1,15 @@
 const { json } = require('body-parser')
-
-const { jwt, discord } = require('./auth/')
-
-const apiControllers = require('./controllers.js')
-const authControllers = require('./auth/controllers')
-
-const DISCORD_CALLBACK_ROUTE = process.env.DISCORD_CALLBACK_ROUTE
+const { AUTHORIZED, GET_USER, EXTEND_JWT } = require('./middleware/jwt.middleware')
 
 module.exports = (app) => {
+    // * Parse JSON on requests
     app.use('/', json())
 
-    // jwt
-    app.get('/auth/login', authControllers.login)
-    app.get('/auth/extend', jwt.middleware.extendJWT, authControllers.extendJWT)
-    app.get('/auth/check', jwt.middleware.isAuthorized, authControllers.checkJWT)
+    // * Auth routes
+    require('./routes/auth.routes')(app)
 
-    // discord
-    app.get('/auth/discord', authControllers.redirectDiscordAuthUrl)
-    app.get(DISCORD_CALLBACK_ROUTE, discord.middleware.discordAuthCallback, authControllers.login)
-
-    // secured routes
-    app.get('/api/products', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.getProducts)
-    app.get('/api/@me', jwt.middleware.isAuthorized, jwt.middleware.extendJWT, apiControllers.me)
-    app.get('/api/updateMe', jwt.middleware.isAuthorized, apiControllers.meUpdate, jwt.middleware.extendJWT, authControllers.extendJWT)
+    // * API routes (need jwt authorization)
+    app.use('/api/', AUTHORIZED, GET_USER, EXTEND_JWT)
+    require('./routes/me.routes')(app)
+    require('./routes/product.routes')(app)
 }
