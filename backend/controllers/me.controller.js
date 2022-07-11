@@ -1,28 +1,41 @@
-const User = require('mongoose').models.User
+const { validationResult } = require('express-validator')
+
 const jwt = require('../auth/jwt')
 
 // * GET api/@me
 async function getData(req, res) {
-    var data = req.user_doc.toJSON()
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+    
+    var data = req._user.toJSON()
     handler(res, 200, data)
 }
 
 // * PUT api/@me/:fieldToUpdate
 async function updateData(req, res) {
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+
     var fieldToUpdate = req.params.fieldToUpdate
     var newValue = req.body.newValue
+    var user = req._user
 
-    var FORBIDDEN_FIELDS = ['points', '_id', '__v', 'discordId']
-    var user = req.user_doc
+    var needsHash = req._needsHash
 
-    // TODO: regex for invalid usernames or passwords
-    if (newValue == '') return handler(res, 400, 'Invalid value')
-    if (Object.keys(req.body).length == 0) return handler(res, 400, 'Body can not be empty')
-    if (FORBIDDEN_FIELDS.includes(fieldToUpdate)) return handler(res, 401)
-    if (!Object.keys(user._doc).includes(fieldToUpdate)) return handler(res, 401)
-
-    user[fieldToUpdate] = (fieldToUpdate == 'hashedPassword') ? User.hash(newValue) : newValue
-    await user.save()
+    user[fieldToUpdate] = (needsHash) ? user.hash(newValue) : newValue
+    user.save()
 
     var data = user.jwtPrepare()
     var newToken = await jwt.sign(data)
