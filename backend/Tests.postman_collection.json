@@ -1,0 +1,1359 @@
+{
+	"info": {
+		"_postman_id": "e7dd7d81-e86e-4167-9b5d-c5ed5db1902e",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8050574"
+	},
+	"item": [
+		{
+			"name": "/auth/ routes",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Successful",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const body = {\r",
+											"    username: pm.collectionVariables.get(\"constantID\"),\r",
+											"    password: pm.collectionVariables.get(\"validPassword\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})\r",
+											"\r",
+											"pm.collectionVariables.set('jwt', pm.cookies.get('jwt'))"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {},
+								"disableCookies": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/auth/login",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sucessful (using discordId)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const body = {\r",
+											"    username: pm.collectionVariables.get(\"constantID\"),\r",
+											"    password: pm.collectionVariables.get(\"validPassword\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/auth/login",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Wrong password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const body = {\r",
+											"    username: pm.collectionVariables.get(\"validUsername\"),\r",
+											"    password: pm.variables.replaceIn(\"{{$randomPassword}}\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disableCookies": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/auth/login",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Wrong username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const body = {\r",
+											"    username: pm.variables.replaceIn(\"{{$randomUserName}}\"),\r",
+											"    password: pm.collectionVariables.get('validPassword')\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disableCookies": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/auth/login",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check",
+					"item": [
+						{
+							"name": "Successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/auth/check",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No JWT cookie",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/auth/check",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid JWT cookie",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"\r",
+											"pm.cookies.jar().clear(url, console.log)\r",
+											"pm.cookies.jar().set(url, 'jwt', '12g7123')"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/auth/check",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manipulated JWT",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik5hb21pZV9SdXRoZXJmb3JkNjciLCJkaXNjb3JkSWQiOiI0NTA0NTMwMzQ3MjQ0OTEyNjYiLCJwb2ludHMiOjE1MCwiaWF0IjoxNjU3NTAxMDc0LCJleHAiOjE2NTc1ODc0NzR9.Lz08s3siBkipahTNA0vcPna1gzZhXf0izQe_V7SYpNM')"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/auth/check",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/api/ routes",
+			"item": [
+				{
+					"name": "Me",
+					"item": [
+						{
+							"name": "Sucessful /api/@me/",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have valid response body', function () {\r",
+											"    const responseJson = pm.response.json()\r",
+											"    pm.expect(responseJson).to.be.an('object')\r",
+											"    pm.expect(responseJson.discordId).to.not.be.undefined\r",
+											"    pm.expect(responseJson.discordId).to.be.a('string')\r",
+											"    pm.expect(responseJson.discordId).to.not.be.undefined\r",
+											"    pm.expect(responseJson.username).to.be.a('string')\r",
+											"    pm.expect(responseJson.discordId).to.not.be.undefined\r",
+											"    pm.expect(responseJson.points).to.be.a('number')\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/@me",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sucessful /api/@me/password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: pm.variables.replaceIn(\"{{$randomPassword}}\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})\r",
+											"\r",
+											"var body = JSON.parse(pm.variables.get('body'))\r",
+											"pm.collectionVariables.set(\"validPassword\", body.newValue)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/hashedPassword",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"hashedPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid value /api/@me/password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: ''\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/hashedPassword",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"hashedPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No body /api/@me/password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/@me/hashedPassword",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"hashedPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update forbidden field /api/@me/",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/points",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"points"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sucessful /api/@me/username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: pm.variables.replaceIn(\"{{$randomUserName}}\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})\r",
+											"\r",
+											"var body = JSON.parse(pm.variables.get('body'))\r",
+											"pm.collectionVariables.set(\"validUsername\", body.newValue)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/username",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"username"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid value /api/@me/username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: ''\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/username",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"username"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No body /api/@me/username",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/@me/username",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"username"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No params /api/@me/",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/@me/t",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"t"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Successful /api/product",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have valid response body', function () {\r",
+											"    const responseJson = pm.response.json()\r",
+											"    pm.expect(responseJson).to.be.an('array')\r",
+											"\r",
+											"    const product = responseJson[0]\r",
+											"    pm.expect(product).to.be.an('object')\r",
+											"    pm.expect(product._id).to.not.be.undefined\r",
+											"    pm.expect(product._id).to.be.a('string')\r",
+											"    pm.expect(product.name).to.not.be.undefined\r",
+											"    pm.expect(product.name).to.be.a('string')\r",
+											"    pm.expect(product.pictureUrl).to.not.be.undefined\r",
+											"    pm.expect(product.pictureUrl).to.be.a('string')\r",
+											"    pm.expect(product.price).to.not.be.undefined\r",
+											"    pm.expect(product.price).to.be.a('number')\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/product",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Successful /api/product/:productId",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have valid response body', function () {\r",
+											"    const product = pm.response.json()\r",
+											"    pm.expect(product).to.be.an('object')\r",
+											"    pm.expect(product._id).to.not.be.undefined\r",
+											"    pm.expect(product._id).to.be.a('string')\r",
+											"    pm.expect(product.name).to.not.be.undefined\r",
+											"    pm.expect(product.name).to.be.a('string')\r",
+											"    pm.expect(product.pictureUrl).to.not.be.undefined\r",
+											"    pm.expect(product.pictureUrl).to.be.a('string')\r",
+											"    pm.expect(product.price).to.not.be.undefined\r",
+											"    pm.expect(product.price).to.be.a('number')\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/product/{{constantProduct}}",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"{{constantProduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Successful /api/product/:productId/buy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 200', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(200)\r",
+											"})\r",
+											"\r",
+											"pm.test('Should have JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.true\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API}}/api/product/{{constantProduct}}/buy",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"{{constantProduct}}",
+										"buy"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "No JWT cookie",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+									"    pm.expect(pm.response.code).to.be.equal(401)\r",
+									"})\r",
+									"\r",
+									"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+									"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API}}/api/",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manipulated JWT",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var url = pm.collectionVariables.get('API')\r",
+									"\r",
+									"pm.cookies.jar().set(url, 'jwt', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik5hb21pZV9SdXRoZXJmb3JkNjciLCJkaXNjb3JkSWQiOiI0NTA0NTMwMzQ3MjQ0OTEyNjYiLCJwb2ludHMiOjE1MCwiaWF0IjoxNjU3NTAxMDc0LCJleHAiOjE2NTc1ODc0NzR9.Lz08s3siBkipahTNA0vcPna1gzZhXf0izQe_V7SYpNM')"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+									"    pm.expect(pm.response.code).to.be.equal(401)\r",
+									"})\r",
+									"\r",
+									"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+									"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API}}/api/",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid JWT cookie",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var url = pm.collectionVariables.get('API')\r",
+									"\r",
+									"pm.cookies.jar().clear(url, console.log)\r",
+									"pm.cookies.jar().set(url, 'jwt', '12g7123')"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
+									"    pm.expect(pm.response.code).to.be.equal(401)\r",
+									"})\r",
+									"\r",
+									"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+									"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API}}/api/",
+							"host": [
+								"{{API}}"
+							],
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.cookies.jar().clear(pm.collectionVariables.get('API'), console.log)"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API",
+			"value": "http://localhost:1337",
+			"type": "string"
+		},
+		{
+			"key": "validUsername",
+			"value": "Roy74",
+			"type": "string"
+		},
+		{
+			"key": "validPassword",
+			"value": "ke3dsElbtCHLiPS",
+			"type": "string"
+		},
+		{
+			"key": "constantID",
+			"value": "1233",
+			"type": "string"
+		},
+		{
+			"key": "jwt",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJpY2t5NjYiLCJkaXNjb3JkSWQiOiIxMjMzIiwicG9pbnRzIjo5OTc5LCJpYXQiOjE2NTc1MTE1MjIsImV4cCI6MTY1NzU5NzkyMn0.EteEK2l7B6q0i42ogaLdPjgXBOENvR1BJ5hmx_w94TM"
+		},
+		{
+			"key": "constantProduct",
+			"value": "62c529ac7b1f8ee913184153",
+			"type": "string"
+		}
+	]
+}
