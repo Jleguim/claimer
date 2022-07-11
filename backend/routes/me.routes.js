@@ -5,5 +5,5 @@ module.exports = (app) => {
     app.get('/api/@me', controller.getData)
 
     // * Update my info
-    app.put('/api/@me', controller.updateData)
+    app.put('/api/@me/:fieldToUpdate', controller.updateData)
 }

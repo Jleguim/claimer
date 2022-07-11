@@ -13,7 +13,7 @@ async function CALLBACK(req, res, next) {
 
     if (!user) {
         user = new User ({ username: userData.username, discordId: userData.id })
-        user.hashPassword(DEFAULT_USER_PASSWORD)
+        user.hashedPassword = User.hash(DEFAULT_USER_PASSWORD)
         await user.save()
     }
 

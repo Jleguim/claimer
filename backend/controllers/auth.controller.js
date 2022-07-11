@@ -1,4 +1,5 @@
 const User = require('mongoose').models.User
+
 const jwt = require('../auth/jwt')
 const discord = require('../auth/discord')
 
@@ -9,14 +10,16 @@ async function login(req, res) {
     }
 
     var user = await User.findOne({ $or: [{ username: req.body.username }, { discordId: req.body.username }] })
+    if (!user) return res.status(401).send({ message: 'Unauthorized' })
 
-    if (!user) return res.status(403).send({ message: 'Forbidden', code: 1 })
-    if (user.checkPassword(req.body.password) == false && req.fromDiscord == false) return res.status(403).send({ message: 'Forbidden', code: 2 })
+    var data = user.jwtPrepare()
+    var token = await jwt.sign(data)
 
-    // TODO: Pass everything but password, __v and _id
-    var token = await jwt.sign({ username: user.username, discordId: user.discordId })
-
-    if (req.fromDiscord == true) {
+    if (!req.fromDiscord) {
+        if (user.checkPassword(req.body.password) == false) {
+            return res.status(401).send({ message: 'Unauthorized' })
+        }
+    } else {
         var body = { jwt: token }
         res.send(`<body>${JSON.stringify(body, 0, 0)}</body><script>window.discord.closeDiscordAuthWindow(document.body.innerText)</script>`)
         return
@@ -41,6 +44,7 @@ async function wrapController(controller, req, res) {
         await controller(req, res)
     } catch (error) {
         console.log(`${controller.name} -> ${error.message}`)
+        console.log(error)
         res.status(500).send({ message: 'Internal Server Error' })
     }
 }

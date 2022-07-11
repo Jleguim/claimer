@@ -22,7 +22,7 @@ async function buyProduct(req, res) {
     // * Using 'req.user_doc' from the getUserData middleware
     var user = req.user_doc
 
-    if (user.points < product.price) return res.send(403).send({ message: 'Not enough balance.' })
+    if (user.points < product.price) return res.status(403).send({ message: 'Not enough balance.' })
 
     // TODO: Add to user inventory or purchase history?
     var newBalance = user.points - product.price

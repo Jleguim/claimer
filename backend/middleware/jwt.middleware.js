@@ -3,7 +3,7 @@ const jwt = require('../auth/jwt')
 
 async function AUTHORIZED(req, res, next) {
     var token = req.cookies.jwt
-    if (!token) return res.status(403).send({ message: 'Forbidden' })
+    if (!token) return res.status(401).send({ message: 'Unauthorized' })
 
     var data = await jwt.verify(token)
     req.jwt_data = data
@@ -20,11 +20,9 @@ async function GET_USER(req, res, next) {
 }
 
 async function EXTEND_JWT(req, res, next) {
-    var ignoredFields = ['-password', '-_id', '-__v']
-    var user = await User.findById(req.user_doc.id).select(ignoredFields)
-    var data = user.toJSON()
-
+    var data = req.user_doc.jwtPrepare()
     var token = await jwt.sign(data)
+    
     req.jwt_data = data
     res.cookie('jwt', token)
 
@@ -36,9 +34,10 @@ async function wrapMiddleware(controller, req, res, next) {
         await controller(req, res, next)
     } catch (error) {
         console.log(`${controller.name} -> ${error.message}`)
+        res.clearCookie('jwt')
 
-        if (error.message == 'jwt expired') {
-            return res.status(403).send({ message: 'Forbidden' })
+        if (error.message == 'jwt expired' || error.message == 'jwt malformed' || error.message == 'invalid signature') {
+            return res.status(401).send({ message: 'Unauthorized' })
         }
 
         res.status(500).send({ message: 'Internal Server Error' })
