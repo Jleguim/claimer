@@ -222,8 +222,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
-											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
 											"})\r",
 											"\r",
 											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
@@ -331,8 +331,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
-											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
 											"})\r",
 											"\r",
 											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
@@ -378,8 +378,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
-											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
 											"})\r",
 											"\r",
 											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
@@ -415,6 +415,7 @@
 										"exec": [
 											"var url = pm.collectionVariables.get('API')\r",
 											"\r",
+											"pm.cookies.jar().clear(url, console.log)\r",
 											"pm.cookies.jar().set(url, 'jwt', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik5hb21pZV9SdXRoZXJmb3JkNjciLCJkaXNjb3JkSWQiOiI0NTA0NTMwMzQ3MjQ0OTEyNjYiLCJwb2ludHMiOjE1MCwiaWF0IjoxNjU3NTAxMDc0LCJleHAiOjE2NTc1ODc0NzR9.Lz08s3siBkipahTNA0vcPna1gzZhXf0izQe_V7SYpNM')"
 										],
 										"type": "text/javascript"
@@ -424,8 +425,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
-											"    pm.expect(pm.response.code).to.be.equal(401)\r",
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
 											"})\r",
 											"\r",
 											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
@@ -716,68 +717,6 @@
 							"response": []
 						},
 						{
-							"name": "Update forbidden field /api/@me/",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"var url = pm.collectionVariables.get('API')\r",
-											"var jwt = pm.collectionVariables.get('jwt')\r",
-											"\r",
-											"const body = {\r",
-											"    newValue: pm.variables.replaceIn(\"{{$randomInt}}\")\r",
-											"}\r",
-											"\r",
-											"pm.variables.set('body', JSON.stringify(body))\r",
-											"pm.cookies.jar().set(url, 'jwt', jwt)"
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test('Status should be 401 i.e. Unauthorized', function () {\r",
-											"    pm.expect(pm.response.code).to.be.equal(401)\r",
-											"})\r",
-											"\r",
-											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
-											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{{body}}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{API}}/api/@me/points",
-									"host": [
-										"{{API}}"
-									],
-									"path": [
-										"api",
-										"@me",
-										"points"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Sucessful /api/@me/username",
 							"event": [
 								{
@@ -980,6 +919,68 @@
 										"api",
 										"@me",
 										"t"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update forbidden field /api/@me/",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var url = pm.collectionVariables.get('API')\r",
+											"var jwt = pm.collectionVariables.get('jwt')\r",
+											"\r",
+											"const body = {\r",
+											"    newValue: pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+											"}\r",
+											"\r",
+											"pm.variables.set('body', JSON.stringify(body))\r",
+											"pm.cookies.jar().set(url, 'jwt', jwt)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Status should be 400 i.e. Bad Request', function () {\r",
+											"    pm.expect(pm.response.code).to.be.equal(400)\r",
+											"})\r",
+											"\r",
+											"pm.test('Shouldnt\\'t have a JWT cookie', function () {\r",
+											"    pm.expect(pm.cookies.has('jwt')).to.be.false\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API}}/api/@me/points",
+									"host": [
+										"{{API}}"
+									],
+									"path": [
+										"api",
+										"@me",
+										"points"
 									]
 								}
 							},
@@ -1333,12 +1334,12 @@
 		},
 		{
 			"key": "validUsername",
-			"value": "Roy74",
+			"value": "Briggs",
 			"type": "string"
 		},
 		{
 			"key": "validPassword",
-			"value": "ke3dsElbtCHLiPS",
+			"value": "xHpgBDEk43t9Si",
 			"type": "string"
 		},
 		{
