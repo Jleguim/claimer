@@ -1,12 +1,23 @@
 const controller = require('../controllers/auth.controller')
+const validator = require('../validators/auth.validators')
 
-const { AUTHORIZED } = require('../middleware/jwt.middleware')
-const { CALLBACK } = require('../middleware/discord.middleware')
+const { authorized } = require('../validators/common.validators')
 
 module.exports = (app) => {
-    app.get('/auth/login', controller.login)
-    app.get('/auth/check', AUTHORIZED, controller.check)
+    app.get('/auth/login',
+        validator.userExistsWithUsername,
+        validator.passwordInBody,
+        controller.login)
 
-    app.get('/auth/discord', controller.discordOauth)
-    app.get('/auth/callback', CALLBACK, controller.login)
+    app.get('/auth/check',
+        authorized,
+        controller.check)
+
+    app.get('/auth/callback',
+        validator.callback,
+        validator.userExistsWithUsername,
+        validator.passwordInBody,
+        controller.callback)
+
+    app.get('/auth/discord', controller.discord)
 }

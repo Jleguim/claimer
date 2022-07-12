@@ -1,30 +1,55 @@
-const User = require('mongoose').models.User
+const { validationResult } = require('express-validator')
+
 const jwt = require('../auth/jwt')
 
 // * GET api/@me
 async function getData(req, res) {
-    var ignoredFields = ['-password', '-_id', '-__v']
-    var user = await User.findById(req.user_doc.id).select(ignoredFields)
-    res.status(200).send(user)
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+    
+    var data = req._user.toJSON()
+    handler(res, 200, data)
 }
 
-// * PUT api/@me
+// * PUT api/@me/:fieldToUpdate
 async function updateData(req, res) {
-    var user = req.user_doc
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
 
-    var keysToUpdate = Object.keys(req.body)
-    keysToUpdate.forEach(key => {
-        user[key] = req.body[key]
-        if (key == 'password') user.hashPassword(user[key])
-    })
+    var fieldToUpdate = req.params.fieldToUpdate
+    var newValue = req.body.newValue
+    var user = req._user
 
-    var data = { username: user.username, discordId: user.discordId }
+    var needsHash = req._needsHash
+
+    user[fieldToUpdate] = (needsHash) ? user.hash(newValue) : newValue
+    user.save()
+
+    var data = user.jwtPrepare()
     var newToken = await jwt.sign(data)
-
     res.cookie('jwt', newToken)
-    await user.save()
 
-    res.status(200).send({ message: 'Updated user' })
+    handler(res, 200, 'Updated user')
+}
+
+async function handler(res, STATUS_CODE = 500, message = 'Unknown error') {
+    if (STATUS_CODE > 200) res.clearCookie('jwt')
+    if (STATUS_CODE == 401) message = 'Unauthorized'
+
+    if ((typeof message) == 'object') return res.status(STATUS_CODE).send(message)
+    res.status(STATUS_CODE).send({ message })
 }
 
 async function wrapController(controller, req, res) {

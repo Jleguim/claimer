@@ -1,39 +1,67 @@
-const User = require('mongoose').models.User
+const { validationResult } = require('express-validator')
+
 const jwt = require('../auth/jwt')
-const discord = require('../auth/discord')
+const authUrl = require('../auth/discord').authUrl
 
-// * GET auth/login
+// * GET test/login
 async function login(req, res) {
-    if (req.body.username == undefined || req.body.password == undefined) {
-        return res.status(400).send({ message: 'Bad Request' })
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
     }
 
-    var user = await User.findOne({ $or: [{ username: req.body.username }, { discordId: req.body.username }] })
+    var user = req._user
+    var token = await jwt.sign(user.jwtPrepare())
 
-    if (!user) return res.status(403).send({ message: 'Forbidden', code: 1 })
-    if (user.checkPassword(req.body.password) == false && req.fromDiscord == false) return res.status(403).send({ message: 'Forbidden', code: 2 })
-
-    // TODO: Pass everything but password, __v and _id
-    var token = await jwt.sign({ username: user.username, discordId: user.discordId })
-
-    if (req.fromDiscord == true) {
-        var body = { jwt: token }
-        res.send(`<body>${JSON.stringify(body, 0, 0)}</body><script>window.discord.closeDiscordAuthWindow(document.body.innerText)</script>`)
-        return
-    }
+    var password = req.body.password
+    var passwordsMatch = user.checkPassword(password)
+    if (!passwordsMatch) return res.status(401).send({ message: 'Unauthorized' })
 
     res.cookie('jwt', token)
-    res.status(200).send({ message: 'Authenticated!' })
+    res.status(200).send({ message: 'Ok' })
 }
 
-// * GET auth/check
+// * GET test/check
 async function check(req, res) {
-    res.status(200).send({ message: 'All good' })
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+
+    res.status(200).send({ message: 'Ok' })
 }
 
-// * GET auth/discord
-async function discordOauth(req, res) {
-    res.redirect(discord.authUrl)
+async function discord(req, res) {
+    res.redirect(authUrl)
+}
+
+async function callback(req, res) {
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+
+    var user = req._user
+    var token = await jwt.sign(user.jwtPrepare())
+
+    var password = req.body.password
+    var passwordsMatch = user.checkPassword(password)
+    if (!passwordsMatch) return res.status(401).send({ message: 'Unauthorized' })
+
+    var body = { jwt: token }
+    var html = `<body>${JSON.stringify(body, 0, 0)}</body><script>window.discord.closeDiscordAuthWindow(document.body.innerText)</script>`
+    res.send(html)
 }
 
 async function wrapController(controller, req, res) {
@@ -46,7 +74,8 @@ async function wrapController(controller, req, res) {
 }
 
 module.exports = {
-    discordOauth: (req, res) => wrapController(discordOauth, req, res),
+    login: (req, res) => wrapController(login, req, res),
     check: (req, res) => wrapController(check, req, res),
-    login: (req, res) => wrapController(login, req, res)
+    discord: (req, res) => wrapController(discord, req, res),
+    callback: (req, res) => wrapController(callback, req, res)
 }

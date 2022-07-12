@@ -1,28 +1,52 @@
+const { validationResult } = require('express-validator')
 const Product = require('mongoose').models.Product
-const jwt = require('../auth/jwt')
 
 // * GET api/product
 async function getProducts(req, res) {
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+
     var products = await Product.find({})
     res.status(200).send(products)
 }
 
 // * GET api/product/:productId
 async function getProduct(req, res) {
-    var productId = req.params.productId
-    var product = await Product.findById(productId)
-    res.status(200).send(product)
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
+
+    res.status(200).send(req._product)
 }
 
 // * GET api/product/:productId/buy
 async function buyProduct(req, res) {
-    var productId = req.params.productId
-    var product = await Product.findById(productId)
+    var errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.clearCookie('jwt')
+        return res.status(400).send({
+            message: 'Bad Request',
+            errors: errors.array()
+        })
+    }
 
-    // * Using 'req.user_doc' from the getUserData middleware
-    var user = req.user_doc
+    var product = req._product
+    var user = req._user
 
-    if (user.points < product.price) return res.send(403).send({ message: 'Not enough balance.' })
+    if (user.points < product.price) {
+        return res.status(403).send({ message: 'Not enough balance.' })
+    }
 
     // TODO: Add to user inventory or purchase history?
     var newBalance = user.points - product.price

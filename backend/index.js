@@ -21,11 +21,14 @@ mongoose.connect(MONGO_URL, error => {
     app.listen(PORT, () => {
         console.log(`Listening on port ${PORT}`)
 
-        const { AUTHORIZED, GET_USER, EXTEND_JWT } = require('./middleware/jwt.middleware')
+        const { authorized } = require('./validators/common.validators')
+        const { EXTEND_JWT } = require('./middleware/jwt.middleware')
 
         app.use(cookie())
         app.use(json())
-        app.use('/api/', AUTHORIZED, GET_USER, EXTEND_JWT)
+
+        // * Validate user JWT and extend it
+        app.use('/api/', authorized, EXTEND_JWT)
 
         // * Auth routes
         require('./routes/auth.routes')(app)
