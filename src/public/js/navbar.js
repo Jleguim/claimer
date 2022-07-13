@@ -1,40 +1,34 @@
-var currentPage = 0;
-var changedPageEvent = new Event('changedPage');
+var navButtons = document.getElementById('nav-buttons')
+var logoutBtn = document.getElementById('logoutBtn')
+var logo = document.getElementById('logo')
 
-(function () {
-    var navButtons = document.getElementById('nav-buttons')
+var children = Array.from(navButtons.children)
 
-    var logo = document.getElementById('logo')
-    logo.onclick = changeCurrentAndUpdate(0)
-
-    var children = Array.from(navButtons.children)
-    children.forEach((child, index) => child.onclick = changeCurrentAndUpdate(index))
-
-    var logoutBtn = document.getElementById('logoutBtn')
-    logoutBtn.onclick = async () => {
-        await window.other.logout()
-        window.location.replace('login.html')
-    }
-
-    function changeCurrentAndUpdate(newCurrent) {
-        return () => {
-            currentPage = newCurrent
-            updateNavButtons()
-
-            document.dispatchEvent(changedPageEvent)
+function updateNavButtons(activeIndex) {
+    children.forEach((child, index) => {
+        if (index == activeIndex) {
+            child.classList.remove('hover:bg-opacity-40')
+            child.classList.add('bg-opacity-40')
+            return
         }
-    }
 
-    function updateNavButtons() {
-        children.forEach((child, index) => {
-            if (index == currentPage) {
-                child.classList.remove('hover:bg-opacity-40')
-                child.classList.add('bg-opacity-40')
-                return
-            }
+        child.classList.remove('bg-opacity-40')
+        child.classList.add('hover:bg-opacity-40')
+    })
+}
 
-            child.classList.remove('bg-opacity-40')
-            child.classList.add('hover:bg-opacity-40')
-        })
-    }
-})()
+function sendEvent(activeIndex) {
+    var event = new CustomEvent('changedPage', { detail: activeIndex })
+    document.dispatchEvent(event)
+}
+
+function buttonOnClick(index) {
+    updateNavButtons(index)
+    sendEvent(index)
+}
+
+children.forEach((child, index) => {
+    child.onclick = () => buttonOnClick(index)
+})
+
+logo.onclick = () => buttonOnClick(0)

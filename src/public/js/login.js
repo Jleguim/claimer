@@ -1,53 +1,40 @@
 var loginBtn = document.getElementById('loginBtn')
 var forLogDiv = document.getElementById('forLog')
 
-window.requests.resumeSession()
-    .then(() => window.location.replace('main.html'))
-    .catch(() => console.log('No session found'))
+function openMain() {
+    window.location.replace('main.html')
+}
 
-loginBtn.onclick = async () => {
+function sendNotification(type = 'error', message, cb) {
+    var loginNotification = document.createElement('claimer-login-log')
+    loginNotification.setAttribute(type, message)
+    forLogDiv.appendChild(loginNotification)
+
+    loginNotification.addEventListener('finished', (event) => {
+        forLogDiv.removeChild(loginNotification)
+
+        if (typeof cb == 'function') cb()
+    })
+}
+
+loginBtn.addEventListener('click', async () => {
     var usernameInpt = document.getElementById('username')
     var passwordInpt = document.getElementById('password')
 
     var username = usernameInpt.value, password = passwordInpt.value
 
-    if (!username && !password) return errorHandler(0)
-    if (!username) return errorHandler(1)
-    if (!password) return errorHandler(2)
+    if (!username && !password) return sendNotification('error', 'Username and password are missing.')
+    if (!username) return sendNotification('error', 'Username is missing.')
+    if (!password) return sendNotification('error', 'Password is missing.')
 
-    var loginResponse = await window.requests.login(username, password)
-    if (loginResponse.status != 200) return errorHandler(loginResponse.status)
+    var err = await window.requests.login(username, password)
 
-    loginHandler()
-}
+    if (err) return sendNotification('error', err)
+    sendNotification('success', 'Logging in...', openMain)
+})
 
-function loginHandler() {
-    var message = 'Logging in...'
-
-    var loginLog = document.createElement('claimer-login-log')
-    loginLog.setAttribute('success', message)
-    forLogDiv.appendChild(loginLog)
-
-    loginLog.addEventListener('finished', (event) => {
-        forLogDiv.removeChild(loginLog)
-
-        window.location.replace('main.html')
+window.requests.resumeSession()
+    .then((err) => {
+        if (err) return
+        openMain()
     })
-}
-
-function errorHandler(status) {
-    var message = 'Unknown error'
-
-    if (status == 403) message = 'Invalid credentials'
-    else if (status == 0) message = 'Invalid username or password'
-    else if (status == 1) message = 'Invalid username'
-    else if (status == 2) message = 'Invalid password'
-
-    var loginError = document.createElement('claimer-login-log')
-    loginError.setAttribute('error', message)
-    forLogDiv.appendChild(loginError)
-
-    loginError.addEventListener('finished', (event) => {
-        forLogDiv.removeChild(loginError)
-    })
-}

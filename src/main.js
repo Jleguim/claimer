@@ -12,14 +12,13 @@ app.whenReady().then(() => {
         icon: __dirname + '/public/img/icon.ico',
         webPreferences: {
             preload: __dirname + '/public/js/preload.js'
-        } 
+        }
     })
 
     // win.removeMenu()
     win.loadURL(__dirname + '/public/views/login.html')
 
-    require('./APICalls.js')
-    require('./MainCalls.js')
+    require('./ipcHandles')
 })
 
 app.addListener('before-quit', (event) => configData.saveConfigData())
