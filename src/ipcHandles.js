@@ -4,6 +4,20 @@ const winManager = require('./winManager')
 const configData = require('./configData')
 const config = require('./config.json')
 
+const product = require('./api/product.calls')
+const auth = require('./api/auth.calls')
+const me = require('./api/me.calls')
+
+ipcMain.handle('resumeSession', auth.check)
+ipcMain.handle('login', auth.login)
+
+ipcMain.handle('@me', me.me)
+ipcMain.handle('updateUsername', me.updateUsername)
+ipcMain.handle('updatePassword', me.updatePassword)
+
+ipcMain.handle('getProducts', product.getProducts)
+ipcMain.handle('buyProduct', product.buyProduct)
+
 ipcMain.handle('logout', (event) => {
     configData.updateToken('')
     configData.saveConfigData()

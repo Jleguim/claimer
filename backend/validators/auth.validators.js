@@ -32,5 +32,5 @@ module.exports.callback = query('code')
             await user.save()
         }
 
-        req.body = { username: user.discordId, password: DEFAULT_USER_PASSWORD }
+        req.body = { username: user.discordId }
     })

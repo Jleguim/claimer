@@ -8,12 +8,10 @@ module.exports.hasFieldToUpdate = param('fieldToUpdate')
 
         var userFields = Object.keys(req._user._doc)
         if (!userFields.includes(v)) return Promise.reject('Invalid field.')
+
+        var needsHash = (v == 'hashedPassword') ? true : false
+        req._needsHash = needsHash
     })
 
 module.exports.hasNewValue = body('newValue')
     .exists({ checkFalsy: true, checkNull: true })
-    .custom(async (v, { req }) => {
-        var fieldToUpdate = req.param.fieldToUpdate
-        var needsHash = (fieldToUpdate == 'hashedPassword') ? true : false
-        req._needsHash = needsHash
-    })

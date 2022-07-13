@@ -15,8 +15,7 @@ module.exports = (app) => {
 
     app.get('/auth/callback',
         validator.callback,
-        validator.userExistsWithUsername,
-        validator.passwordInBody,
+        validator.userExistsWithUsername, // just for req._user
         controller.callback)
 
     app.get('/auth/discord', controller.discord)

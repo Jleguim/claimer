@@ -1,32 +1,31 @@
 var contentDiv = document.getElementById('content')
 
-function renderPage() {
-    if (currentPage == 0) renderProductPage()
-    if (currentPage == 1) renderProfilePage()
-    // if (currentPage == 1) return contentDiv.innerHTML = ''
-    // if (currentPage == 2) return contentDiv.innerHTML = ''
-    // if (currentPage == 3) renderProfilePage()
+async function openLogin() {
+    await window.other.logout()
+    window.location.replace('login.html')
 }
 
 async function renderProfilePage() {
-    var getResponse = await window.requests.me()
-    var myData = getResponse.body
+    var { err, data } = await window.requests.me()
+
+    if (err) return openLogin()
 
     var userSettings = document.createElement('claimer-user-settings')
-    userSettings.setAttribute('username', myData.username)
+    userSettings.setAttribute('username', data.username)
 
     contentDiv.innerHTML = ''
     contentDiv.appendChild(userSettings)
 }
 
 async function renderProductPage() {
-    var getResponse = await window.requests.getProducts()
-    var products = getResponse.body
+    var { err, data } = await window.requests.getProducts()
+
+    if (err) return openLogin()
 
     var grid = document.createElement('div')
     grid.classList.add('grid', 'grid-cols-1', 'grid-rows-1', 'gap-4', 'lg:grid-cols-5', 'sm:grid-cols-3', 'md:grid-cols-4', 'm-7')
 
-    products.forEach((product, index) => {
+    data.forEach((product, index) => {
         var productElement = document.createElement('claimer-product')
         productElement.setAttribute('productId', product._id)
         productElement.setAttribute('name', product.name)
@@ -34,12 +33,28 @@ async function renderProductPage() {
         productElement.setAttribute('img', product.pictureUrl)
         grid.appendChild(productElement)
 
-        if (products.length == index + 1) {
+        if (data.length == index + 1) {
             contentDiv.innerHTML = ''
             contentDiv.appendChild(grid)
         }
     })
 }
 
-document.addEventListener('changedPage', renderPage)
-renderPage()
+document.addEventListener('changedPage', (ev) => {
+    var targetPage = ev.detail
+    console.log(targetPage)
+
+    switch (targetPage) {
+        case 0:
+            renderProductPage()
+            break
+        case 1:
+            renderProfilePage()
+            break
+        case 2:
+            openLogin()
+            break
+    }
+})
+
+sendEvent(0) // See navbar.js:20

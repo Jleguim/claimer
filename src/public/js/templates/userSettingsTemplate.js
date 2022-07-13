@@ -9,34 +9,33 @@ class UserSettingsElement extends HTMLElement {
     connectedCallback() {
         const saveUsernameBtn = this.userSettings.getElementById('saveUsernameBtn')
         const usernameInpt = this.userSettings.getElementById('username')
-    
+
         const savePassBtn = this.userSettings.getElementById('savePassBtn')
         const newPassInpt = this.userSettings.getElementById('newPass')
         const confirmPassInpt = this.userSettings.getElementById('confirmPass')
 
         saveUsernameBtn.onclick = async () => {
-            var toUpdate = {}
             var currentUsername = this.getAttribute('username')
 
             if (usernameInpt.value == ' ') return console.log('Invalid username')
             if (usernameInpt.value == currentUsername || usernameInpt.value == '') return
 
-            toUpdate.username = usernameInpt.value
-
-            await window.requests.updateUser(toUpdate)
-            renderProfilePage()
+            window.requests.updateUsername(usernameInpt.value)
+                .then((err) => {
+                    if (err) return openLogin()
+                    renderProfilePage()
+                })
         }
 
         savePassBtn.onclick = async () => {
-            var toUpdate = {}
-
             if (newPassInpt.value == '' || confirmPassInpt.value == '') return console.log('Invalid password')
             if (newPassInpt.value != confirmPassInpt.value) return console.log('Passwords do not match')
-            
-            toUpdate.password = newPassInpt.value
 
-            await window.requests.updateUser(toUpdate)
-            renderProfilePage()
+            window.requests.updatePassword(newPassInpt.value)
+                .then((err) => {
+                    if (err) return openLogin()
+                    renderProfilePage()
+                })
         }
 
         this.appendChild(this.userSettings)

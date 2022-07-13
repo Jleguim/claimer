@@ -23,48 +23,46 @@
   <nav class="relative shadow-xl ring-1 ring-gray-300/5">
     <div class="px-8">
       <div class="flex h-16 items-center">
+        <img class="mx-auto block h-12 w-auto cursor-pointer sm:mx-0" id="logo" src="../img/logo.png" alt="Logo" />
 
-        <div class="flex flex-shrink-0 items-center cursor-pointer" id="logo">
-          <img class="block h-12 w-auto"
-            src="https://cdn.discordapp.com/attachments/451359497546498051/993374995638140958/logo.png" alt="Logo" />
-        </div>
-
-        <div class="absolute right-0 mr-6">
+        <div class="invisible absolute right-0 mr-6 sm:visible">
           <div class="flex space-x-4" id="nav-buttons">
             <a
-              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 bg-opacity-40 text-white cursor-pointer">Home</a>
+              class="cursor-pointer rounded-md bg-violet-500 bg-opacity-40 px-3 py-2 text-sm font-medium text-white">Home</a>
             <!-- <a
-              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">Announcements</a>
+                class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">Announcements</a>
+              <a
+                class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">About</a> -->
             <a
-              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">About</a> -->
-            <a
-              class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer">
+              class="cursor-pointer rounded-md bg-violet-500 px-3 py-2 text-sm font-medium text-white hover:bg-opacity-40">
               <i class="fa-solid fa-user"></i>
             </a>
-            <a class="rounded-md px-3 py-2 text-sm font-medium bg-violet-500 hover:bg-opacity-40 text-white cursor-pointer"
+            <a class="cursor-pointer rounded-md bg-violet-500 px-3 py-2 text-sm font-medium text-white hover:bg-opacity-40"
               id="logoutBtn">
               <i class="fa-solid fa-right-from-bracket"></i>
             </a>
           </div>
         </div>
-
       </div>
     </div>
   </nav>
+
 
   <div class="text-white" id="content"></div>
 
   <template id="product">
     <div class="shadow-xl ring-1 ring-gray-300/5 p-3 text-center">
       <div class="justify-center flex mb-3">
-        <img class="block h-48 w-auto" id="productimg" />
+        <img class="block h-24 w-auto sm:h-28 md:h-32 lg:h-36" id="productimg" />
       </div>
       <div class="mb-3">
         <p id="productname" class="text-lg"></p>
         <p id="productprice" class="text-sm"></p>
       </div>
       <div class="mb-3">
-        <button class="focus:shadow-outline w-20 rounded bg-violet-500 py-2 px-4 font-bold text-white hover:bg-opacity-40 focus:outline-none" id="buybtn">Buy</button>
+        <button
+          class="focus:shadow-outline w-20 rounded bg-violet-500 py-2 px-4 font-bold text-white hover:bg-opacity-40 focus:outline-none"
+          id="buybtn">Buy</button>
       </div>
     </div>
   </template>
