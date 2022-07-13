@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('requests', {
     me: () => ipcRenderer.invoke('@me'),
 
     getProducts: () => ipcRenderer.invoke('getProducts'),
+    getProduct: (productId) => ipcRenderer.invoke('getProduct', productId),
     buyProduct: (productId) => ipcRenderer.invoke('buyProduct', productId)
 })
 

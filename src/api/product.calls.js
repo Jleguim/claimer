@@ -30,6 +30,30 @@ module.exports.getProducts = (e) => {
     })
 }
 
+module.exports.getProduct = (e, productId) => {
+    return new Promise(async (resolve, reject) => {
+        var endpoint = `${config.API}/api/product/${productId}`
+        var jwtCookie = `jwt=${getToken()}`
+
+        try {
+            var response = await requests
+                .get(endpoint)
+                .set('Cookie', jwtCookie)
+                .ok(res => res.status < 500)
+
+            if (response.status == 401) return end('Unauthorized.')
+
+            var jwt = getTokenFromResponse(response)
+            updateToken(jwt)
+
+            resolve(null, response.body)
+        } catch (err) {
+            console.log(err.message)
+            resolve('Internal error.')
+        }
+    })
+}
+
 module.exports.buyProduct = (e, productId) => {
     return new Promise(async (resolve, reject) => {
         var endpoint = `${config.API}/api/product/${productId}/buy`

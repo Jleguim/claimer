@@ -16,6 +16,7 @@ ipcMain.handle('updateUsername', me.updateUsername)
 ipcMain.handle('updatePassword', me.updatePassword)
 
 ipcMain.handle('getProducts', product.getProducts)
+ipcMain.handle('getProduct', product.getProduct)
 ipcMain.handle('buyProduct', product.buyProduct)
 
 ipcMain.handle('logout', (event) => {
