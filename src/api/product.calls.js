@@ -37,7 +37,7 @@ module.exports.buyProduct = (e, productId) => {
 
         try {
             var response = await requests
-                .get(endpoint)
+                .put(endpoint)
                 .set('Cookie', jwtCookie)
                 .ok(res => res.status < 500)
 

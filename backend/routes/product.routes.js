@@ -14,7 +14,7 @@ module.exports = (app) => {
         controller.getProduct)
 
     // * Buy a product
-    app.get('/api/product/:productId/buy',
+    app.put('/api/product/:productId/buy',
         validator.hasProductId,
         controller.buyProduct)
 }

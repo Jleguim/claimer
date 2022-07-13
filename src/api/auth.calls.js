@@ -33,7 +33,7 @@ module.exports.login = (e, username, password) => {
 
         try {
             var response = await requests
-                .get(endpoint)
+                .put(endpoint)
                 .send(credentials)
                 .ok(res => res.status < 500)
 

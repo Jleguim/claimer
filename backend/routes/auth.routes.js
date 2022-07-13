@@ -4,7 +4,7 @@ const validator = require('../validators/auth.validators')
 const { authorized } = require('../validators/common.validators')
 
 module.exports = (app) => {
-    app.get('/auth/login',
+    app.put('/auth/login',
         validator.userExistsWithUsername,
         validator.passwordInBody,
         controller.login)
