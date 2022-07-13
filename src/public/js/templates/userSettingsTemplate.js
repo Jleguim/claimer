@@ -17,6 +17,7 @@ class UserSettingsElement extends HTMLElement {
         saveUsernameBtn.onclick = async () => {
             var currentUsername = this.getAttribute('username')
 
+            // TODO: Proper notifications
             if (usernameInpt.value == ' ') return console.log('Invalid username')
             if (usernameInpt.value == currentUsername || usernameInpt.value == '') return
 
@@ -28,6 +29,7 @@ class UserSettingsElement extends HTMLElement {
         }
 
         savePassBtn.onclick = async () => {
+            // TODO: Proper notifications
             if (newPassInpt.value == '' || confirmPassInpt.value == '') return console.log('Invalid password')
             if (newPassInpt.value != confirmPassInpt.value) return console.log('Passwords do not match')
 

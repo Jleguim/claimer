@@ -42,7 +42,6 @@ async function renderProductPage() {
 
 document.addEventListener('changedPage', (ev) => {
     var targetPage = ev.detail
-    console.log(targetPage)
 
     switch (targetPage) {
         case 0:

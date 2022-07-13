@@ -44,7 +44,7 @@ module.exports.login = (e, username, password) => {
 
             resolve(null)
         } catch (err) {
-            console.log(err)
+            console.log(err.message)
             resolve('Internal error.')
         }
     })
