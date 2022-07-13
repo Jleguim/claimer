@@ -55,10 +55,6 @@ async function callback(req, res) {
     var user = req._user
     var token = await jwt.sign(user.jwtPrepare())
 
-    var password = req.body.password
-    var passwordsMatch = user.checkPassword(password)
-    if (!passwordsMatch) return res.status(401).send({ message: 'Unauthorized' })
-
     var body = { jwt: token }
     var html = `<body>${JSON.stringify(body, 0, 0)}</body><script>window.discord.closeDiscordAuthWindow(document.body.innerText)</script>`
     res.send(html)
