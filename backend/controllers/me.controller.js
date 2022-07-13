@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator')
+const { User } = require('mongoose').models
 
 const jwt = require('../auth/jwt')
 
@@ -34,7 +35,7 @@ async function updateData(req, res) {
 
     var needsHash = req._needsHash
 
-    user[fieldToUpdate] = (needsHash) ? user.hash(newValue) : newValue
+    user[fieldToUpdate] = (needsHash) ? User.hash(newValue) : newValue
     user.save()
 
     var data = user.jwtPrepare()
